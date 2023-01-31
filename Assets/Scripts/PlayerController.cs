@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public float thrustSpeed = 10.0f;
     public float rotateSpeed = 0.5f;
     public float brakeSpeed = 5.0f;
+    public bool gameActive;
+    public bool moveMouse = true;
 
     private Rigidbody playerRb;
     // Start is called before the first frame update
@@ -21,8 +23,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        // manage mouselook in separate function, also helps with testing
-        //MouseLook();
+		// manage mouselook in separate function, also helps with testing
+		if (moveMouse)
+		{
+            MouseLook();
+        }
+        
 
         // manage keyboard movement
         KeyboardMovement();
@@ -100,5 +106,10 @@ public class PlayerController : MonoBehaviour
             playerRb.drag = 0;
             playerRb.angularDrag = 0;
         }
+		// turn off and on mouselook
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+            moveMouse = !moveMouse;
+		}
     }
 }
