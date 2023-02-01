@@ -170,6 +170,13 @@ MonoBehaviour:
   enemyNumber: 8
   enemyPrefab: {fileID: 5174222318253298796, guid: d6e4564485d4436448cc6d1d12f69f66, type: 3}
   enemiesAlive: 0
+  terrain:
+  - {fileID: 9129226993398033998, guid: 9d60226bb7262604c95d043e1c2b27b8, type: 3}
+  - {fileID: 7583226401065148849, guid: ca51fde73d9f4034486441b1e912d92b, type: 3}
+  - {fileID: 331513519860591550, guid: 9b214a550fdeb684c9591e4d3a71470c, type: 3}
+  - {fileID: 5948288824528688141, guid: 12bb2787634764148b2d5cbfa6047d37, type: 3}
+  - {fileID: 8649652364906332687, guid: d994f6ef8c4b65d43b6e581feefba90b, type: 3}
+  - {fileID: 5961189992496042828, guid: b53bc1a89e8f0aa44b1d58029e6a3b99, type: 3}
 --- !u!1 &623040294
 GameObject:
   m_ObjectHideFlags: 0

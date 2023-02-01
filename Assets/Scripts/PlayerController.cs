@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     void KeyboardMovement()
 	{
-        //manage movement with RigidBody and 
+        //manage movement with RigidBody and Relative Forces 
         //forward with W
         if (Input.GetKey(KeyCode.W))
         {
