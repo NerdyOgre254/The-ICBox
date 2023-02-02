@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float brakeSpeed = 5.0f;
     public bool gameActive;
     public bool moveMouse = true;
+    public float pushForce = 2.0f;
 
     private Rigidbody playerRb;
     // Start is called before the first frame update
@@ -112,4 +113,16 @@ public class PlayerController : MonoBehaviour
             moveMouse = !moveMouse;
 		}
     }
+
+	private void OnCollisionEnter(Collision collision)
+	{
+        //Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
+        Vector3 repulsionDirection = (transform.position - collision.gameObject.transform.position).normalized;
+        //stop the player
+        playerRb.velocity = new Vector3(0, 0, 0);
+        playerRb.angularVelocity = new Vector3(0, 0, 0);
+
+        //shunt the player away from the object it hit
+        playerRb.AddForce(repulsionDirection * pushForce, ForceMode.Impulse);
+	}
 }

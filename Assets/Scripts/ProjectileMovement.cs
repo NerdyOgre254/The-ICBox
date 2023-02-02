@@ -24,15 +24,6 @@ public class ProjectileMovement : MonoBehaviour
         transform.Translate(Vector3.up * Time.deltaTime * projectileSpeed);
     }
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		if (collision.gameObject.CompareTag("Terrain"))
-		{
-            Debug.Log("Contact");
-            Destroy(gameObject);
-		}
-	}
-
 	private void OnTriggerEnter(Collider other)
 	{
         if (other.gameObject.CompareTag("Terrain"))
@@ -43,8 +34,8 @@ public class ProjectileMovement : MonoBehaviour
 		{
             Destroy(other.gameObject);
             Destroy(gameObject);
-            gameManager.enemyNumber--;
-
+            gameManager.enemiesAlive--;
+            gameManager.UpdateScore(1);
 		}
     }
 }
