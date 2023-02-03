@@ -5,6 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isGameOver;
     private int playerScore;
     private float gameTime = 61;
     public GameObject playerObj;
@@ -13,32 +14,74 @@ public class GameManager : MonoBehaviour
     private float gameBounds = 49.0f; //test value only
     public int enemiesAlive;
     public GameObject[] terrain;
+
+    //main menu UI assets
+    public TextMeshProUGUI titleText;
+    public GameObject startGameButton;
+    public GameObject gameControls;
+
+    //in game UI assets
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI enemiesText;
+    public TextMeshProUGUI crosshair;
+    public TextMeshProUGUI gameOverText;
+    public GameObject restartGameButton;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartGame();
+        ShowMainMenu();
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        gameTime -= Time.deltaTime;
-        timeText.text = "Time: " + (int)gameTime;
-        enemiesText.text = "Intruders: " + enemiesAlive;
+        // Count down game time if in game. Manage game text for enemies and time.
+        if (!isGameOver)
+		{
+            gameTime -= Time.deltaTime;
+            if (gameTime <= 0)
+            {
+                GameOver();
+            }
+            timeText.text = "Time: " + (int)gameTime;
+            enemiesText.text = "Intruders: " + enemiesAlive;
+        }
+        
     }
 
     public void ShowMainMenu()
 	{
+        isGameOver = true;
+        //display title
+        titleText.gameObject.SetActive(true);
 
+        //display buttons for New Game
+        startGameButton.gameObject.SetActive(true);
+
+        //display controls
+        gameControls.gameObject.SetActive(true);
 	}
 
     public void StartGame()
 	{
+        // Deactivate Main Menu UI elements
+        titleText.gameObject.SetActive(false);
+        startGameButton.gameObject.SetActive(false);
+        gameControls.gameObject.SetActive(false);
+
+        // Deactivate Game Over UI elements
+        gameOverText.gameObject.SetActive(false);
+        restartGameButton.gameObject.SetActive(false);
+
+        // Activate Game UI elements
+        scoreText.gameObject.SetActive(true);
+        timeText.gameObject.SetActive(true);
+        enemiesText.gameObject.SetActive(true);
+        crosshair.gameObject.SetActive(true);
+
         // reset player position
         playerObj.transform.position = new Vector3(0, 0, 0);
         playerObj.transform.eulerAngles = new Vector3(0, 0, 0);
@@ -59,6 +102,9 @@ public class GameManager : MonoBehaviour
 
         // reset enemy number
         enemiesText.text = "Intruders: " + enemiesAlive;
+
+        // Set isGameOver Flag to false to allow mouselook
+        isGameOver = false;
 	}
 
     //spawns a number of enemy targets
@@ -130,5 +176,12 @@ public class GameManager : MonoBehaviour
 	{
         playerScore += scoreToAdd;
         scoreText.text = "Score: " + playerScore;
+	}
+
+    public void GameOver()
+	{
+        isGameOver = true;
+        gameOverText.gameObject.SetActive(true);
+        restartGameButton.gameObject.SetActive(true);
 	}
 }

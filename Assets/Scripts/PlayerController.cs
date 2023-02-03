@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject playerCamera;
     public GameObject playerWeapon;
+    public GameManager gameManager;
     public float thrustSpeed = 10.0f;
     public float rotateSpeed = 0.5f;
     public float brakeSpeed = 5.0f;
@@ -17,36 +18,39 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         playerRb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-		// manage mouselook in separate function, also helps with testing
-		if (moveMouse)
+        if (gameManager.isGameOver == false)
 		{
-            MouseLook();
+            // Manage mouselook in separate function, also helps with testing
+            if (moveMouse)
+            {
+                MouseLook();
+            }
+
+            // Manage keyboard movement
+            KeyboardMovement();
+
+            // Left Mouse click fires a weapon
+            if (Input.GetMouseButtonDown(0))
+            {
+                Instantiate(playerWeapon, transform.position, transform.rotation);
+            }
         }
-        
-
-        // manage keyboard movement
-        KeyboardMovement();
-        
-        // mouse click fires a weapon
-        if (Input.GetMouseButtonDown(0))
-		{
-            Instantiate(playerWeapon, transform.position, transform.rotation);
-		}
+		
     }
 
     void MouseLook()
 	{
         // Manage mouselook. 
         // TODO : Properly work out how these work rather than playing assign random junk
-        float horizontal = Input.GetAxis("Mouse Y") * -1 * thrustSpeed;
-        float vertical = Input.GetAxis("Mouse X") * thrustSpeed;
+        float horizontal = Input.GetAxis("Mouse Y") * -1;
+        float vertical = Input.GetAxis("Mouse X");
         transform.Rotate(horizontal, vertical, 0);
         playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         playerCamera.transform.rotation = transform.rotation;
@@ -116,9 +120,10 @@ public class PlayerController : MonoBehaviour
 
 	private void OnCollisionEnter(Collision collision)
 	{
-        //Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
+        // Get the magnitude 1 vector away from the object's central point
         Vector3 repulsionDirection = (transform.position - collision.gameObject.transform.position).normalized;
-        //stop the player
+
+        // Stop the player
         playerRb.velocity = new Vector3(0, 0, 0);
         playerRb.angularVelocity = new Vector3(0, 0, 0);
 
