@@ -13,13 +13,19 @@ public class PlayerController : MonoBehaviour
     public bool gameActive;
     public bool moveMouse = true;
     public float pushForce = 2.0f;
+    public AudioClip shotSound;
+    public AudioClip crashSound;
+
 
     private Rigidbody playerRb;
+    private AudioSource playerAudio;
+
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         playerRb = GetComponent<Rigidbody>();
+        playerAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -39,6 +45,7 @@ public class PlayerController : MonoBehaviour
             // Left Mouse click fires a weapon
             if (Input.GetMouseButtonDown(0))
             {
+                playerAudio.PlayOneShot(shotSound);
                 Instantiate(playerWeapon, transform.position, transform.rotation);
             }
         }
@@ -129,5 +136,8 @@ public class PlayerController : MonoBehaviour
 
         //shunt the player away from the object it hit
         playerRb.AddForce(repulsionDirection * pushForce, ForceMode.Impulse);
+
+        //play the sound of impact with an object
+        playerAudio.PlayOneShot(crashSound, 1.0f);
 	}
 }
