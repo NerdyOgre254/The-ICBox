@@ -67,6 +67,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
 	{
+        // Lock cursor in place while game is running
+        Cursor.lockState = CursorLockMode.Locked;
+
         // Deactivate Main Menu UI elements
         titleText.gameObject.SetActive(false);
         startGameButton.gameObject.SetActive(false);
@@ -97,7 +100,7 @@ public class GameManager : MonoBehaviour
         UpdateScore(0);
 
         // reset player timer
-        gameTime = 60;
+        gameTime = 61;
         timeText.text = "Time: " + (int)gameTime;
 
         // reset enemy number
@@ -112,9 +115,19 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < numberOfTargets; i++)
 		{
-            // find a random spot within the game boundary (currently a cube, currently manually set)
-            Vector3 spawnPos = RandomVector(-gameBounds, gameBounds);            
-            Instantiate(enemyPrefab, spawnPos, Quaternion.identity);    // sets rotation to 0,0,0
+            bool validEnemyPlacement = false;
+            while (!validEnemyPlacement)
+			{
+                // find a random spot within the game boundary (currently a cube, currently manually set)
+                Vector3 spawnPos = RandomVector(-gameBounds, gameBounds);
+                float targetRadius = transform.localScale.x / 2;
+
+                if(!Physics.CheckSphere(spawnPos, targetRadius))
+				{
+                    validEnemyPlacement = true;
+                    Instantiate(enemyPrefab, spawnPos, Quaternion.identity);    // sets rotation to 0,0,0
+                }
+            }
         }
         enemiesAlive = numberOfTargets;
 	}
@@ -180,8 +193,29 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
 	{
+        Cursor.lockState = CursorLockMode.None;
         isGameOver = true;
         gameOverText.gameObject.SetActive(true);
         restartGameButton.gameObject.SetActive(true);
+	}
+
+    void PlayStandardGame()
+	{
+        //start game
+
+        //if there are no more targets, spawn more
+
+        //if time runs out, game over
+	}
+
+    void PlayEnduranceGame()
+	{
+        //start game
+
+        //on enemy destruction, increase time by a certain amount
+
+        //if there are no more targets, spawn more
+
+        //if time runs out, game over
 	}
 }
