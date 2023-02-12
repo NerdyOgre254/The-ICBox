@@ -14,10 +14,12 @@ public class GameManager : MonoBehaviour
     private float gameBounds = 49.0f; //test value only
     public int enemiesAlive;
     public GameObject[] terrain;
+    private bool isEnduranceGame = false;
 
     //main menu UI assets
     public TextMeshProUGUI titleText;
     public GameObject startGameButton;
+    public GameObject marathonModeButton;
     public GameObject gameControls;
 
     //in game UI assets
@@ -41,6 +43,11 @@ public class GameManager : MonoBehaviour
         // Count down game time if in game. Manage game text for enemies and time.
         if (!isGameOver)
 		{
+            if (enemiesAlive < 1)
+            {
+                SpawnTargets(8);
+            }
+
             gameTime -= Time.deltaTime;
             if (gameTime <= 0)
             {
@@ -48,8 +55,7 @@ public class GameManager : MonoBehaviour
             }
             timeText.text = "Time: " + (int)gameTime;
             enemiesText.text = "Intruders: " + enemiesAlive;
-        }
-        
+        }        
     }
 
     public void ShowMainMenu()
@@ -60,6 +66,7 @@ public class GameManager : MonoBehaviour
 
         //display buttons for New Game
         startGameButton.gameObject.SetActive(true);
+        marathonModeButton.gameObject.SetActive(true);
 
         //display controls
         gameControls.gameObject.SetActive(true);
@@ -74,6 +81,7 @@ public class GameManager : MonoBehaviour
         titleText.gameObject.SetActive(false);
         startGameButton.gameObject.SetActive(false);
         gameControls.gameObject.SetActive(false);
+        marathonModeButton.gameObject.SetActive(false);
 
         // Deactivate Game Over UI elements
         gameOverText.gameObject.SetActive(false);
@@ -91,9 +99,6 @@ public class GameManager : MonoBehaviour
 
         // load in terrain
         SpawnTerrain(10);
-
-        // load in enemies
-        SpawnTargets(enemyNumber);
 
         // reset score
         playerScore = 0;
@@ -189,33 +194,31 @@ public class GameManager : MonoBehaviour
 	{
         playerScore += scoreToAdd;
         scoreText.text = "Score: " + playerScore;
+        if(isEnduranceGame)
+		{
+            gameTime += 5;
+		}
 	}
 
     public void GameOver()
 	{
         Cursor.lockState = CursorLockMode.None;
         isGameOver = true;
+        isEnduranceGame = false;
         gameOverText.gameObject.SetActive(true);
         restartGameButton.gameObject.SetActive(true);
 	}
 
-    void PlayStandardGame()
+    public void PlayStandardGame()
 	{
         //start game
-
-        //if there are no more targets, spawn more
-
-        //if time runs out, game over
+        StartGame();
 	}
 
-    void PlayEnduranceGame()
+    public void PlayEnduranceGame()
 	{
+        isEnduranceGame = true;
         //start game
-
-        //on enemy destruction, increase time by a certain amount
-
-        //if there are no more targets, spawn more
-
-        //if time runs out, game over
-	}
+        StartGame();
+    }
 }

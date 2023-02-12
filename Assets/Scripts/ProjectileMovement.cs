@@ -9,6 +9,7 @@ public class ProjectileMovement : MonoBehaviour
     private GameObject projectileSource;
     private AudioSource projectileAudio;
     public AudioClip collisionSound;
+    public ParticleSystem explosionParticle;
 
     // Start is called before the first frame update
     void Start()
@@ -28,14 +29,17 @@ public class ProjectileMovement : MonoBehaviour
     }
 
 	private void OnTriggerEnter(Collider other)
-	{        
+	{
+        
         if (other.gameObject.CompareTag("Terrain"))
         {
+            explosionParticle.Play();
             projectileAudio.PlayOneShot(collisionSound, 0.5f);  //play at half strength
             Destroy(gameObject);
         }
         if (other.gameObject.CompareTag("Enemy"))
 		{
+            explosionParticle.Play();
             projectileAudio.PlayOneShot(collisionSound, 0.5f);
             Destroy(other.gameObject);
             Destroy(gameObject);
@@ -43,4 +47,9 @@ public class ProjectileMovement : MonoBehaviour
             gameManager.UpdateScore(1);
 		}
     }
+
+	private void OnCollisionEnter(Collision collision)
+	{
+        
+	}
 }

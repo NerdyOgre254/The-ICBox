@@ -123,6 +123,10 @@ public class PlayerController : MonoBehaviour
 		{
             moveMouse = !moveMouse;
 		}
+        if (Input.GetKeyDown(KeyCode.Escape))
+		{
+            Application.Quit();
+		}
     }
 
 	private void OnCollisionEnter(Collision collision)
